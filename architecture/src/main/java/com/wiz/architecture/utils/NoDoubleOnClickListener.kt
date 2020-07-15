@@ -14,9 +14,9 @@ abstract class NoDoubleOnClickListener : View.OnClickListener {
     override fun onClick(v: View?) {
         v?.let {
             if (lastExecuteTime == 0L || System.currentTimeMillis() - lastExecuteTime > minimumInterval) {
+                lastExecuteTime = System.currentTimeMillis()
                 onDoubleOnClick(v)
             }
-            lastExecuteTime = System.currentTimeMillis()
         }
     }
 

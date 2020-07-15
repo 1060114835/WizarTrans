@@ -12,8 +12,8 @@ import java.util.concurrent.Executors
 
 internal object ToastUtil {
     private var lastExecuteTime = 0L
-    internal val messageQueue = LinkedList<String>()
-    private const val minimumInterval = 1000L
+    internal val messageQueue = Collections.synchronizedList(LinkedList<String>())
+    private const val minimumInterval = 2000L
     private val executor: Executor = Executors.newSingleThreadExecutor()
     private const val TOAST_MESSAGE_FLAG = 1
 
@@ -21,27 +21,26 @@ internal object ToastUtil {
      *  在application处进行初始化
      */
     fun loop(appContext: Context) {
-        val handler = object : Handler(Looper.getMainLooper()) {
-            override fun handleMessage(msg: Message) {
-                super.handleMessage(msg)
-                if (msg.what == TOAST_MESSAGE_FLAG) {
-                    Toast.makeText(appContext, msg.obj as String, Toast.LENGTH_SHORT).show()
-                }
+        val handler = Handler(Looper.getMainLooper()) {
+            if (it.what == TOAST_MESSAGE_FLAG) {
+                Toast.makeText(appContext, it.obj as String, Toast.LENGTH_SHORT).show()
             }
+            false
         }
         executor.execute {
             while (true) {
-                if (!messageQueue.isEmpty() &&
+                if (messageQueue.isNotEmpty() &&
                     (lastExecuteTime == 0L ||
-                            System.currentTimeMillis() - lastExecuteTime >= minimumInterval)) {
+                            System.currentTimeMillis() - lastExecuteTime >= minimumInterval)
+                ) {
                     val message = Message.obtain().apply {
                         what = TOAST_MESSAGE_FLAG
-                        obj = messageQueue.poll()
+                        obj = messageQueue.removeAt(0)
+                        lastExecuteTime = System.currentTimeMillis()
                         (obj as String).log()
                     }
                     handler.sendMessage(message)
                 }
-                lastExecuteTime = System.currentTimeMillis()
             }
         }
     }
