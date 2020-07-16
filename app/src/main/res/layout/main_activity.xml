@@ -13,22 +13,32 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_width="358dp"
+        android:layout_height="430dp"
+        android:orientation="vertical">
 
 
         <Button
             android:id="@+id/button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="152dp"
-            android:text="Button"
-            app:onClick="@{action_handler}"
+            android:layout_marginTop="104dp"
+            android:text="@{view_model.name}"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintHorizontal_bias="0.433"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:onClick="@{action_handler}" />
+
+        <fragment
+            android:id="@+id/test_fragment"
+            android:name="com.wiz.wizartrans.SampleFragment"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/button" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

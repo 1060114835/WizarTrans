@@ -17,6 +17,11 @@ class MainActivity : BaseActivity() {
         return MainActionHandler()
     }
 
+    override fun loadData() {
+        val viewModel = viewModel as MainViewModel
+        viewModel.name.set("databing 绑定视图")
+    }
+
     override fun configureDataBinding(): ViewDataBinding {
         val binding = MainActivityBinding.inflate(layoutInflater)
         binding.setVariable(BR.view_model, viewModel)

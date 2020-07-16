@@ -1,4 +1,4 @@
-package com.chen.test.viewmodel
+package com.wiz.architecture.mvvm.viewmodel
 
 import androidx.lifecycle.ViewModel
 

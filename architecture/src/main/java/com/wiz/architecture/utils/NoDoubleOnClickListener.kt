@@ -9,11 +9,12 @@ import android.view.View
 abstract class NoDoubleOnClickListener : View.OnClickListener {
 
     private var lastExecuteTime = 0L
+    //两次点击之间的最小时间间隔
     private val minimumInterval = 200L
 
     override fun onClick(v: View?) {
         v?.let {
-            if (lastExecuteTime == 0L || System.currentTimeMillis() - lastExecuteTime > minimumInterval) {
+            if (System.currentTimeMillis() - lastExecuteTime > minimumInterval) {
                 lastExecuteTime = System.currentTimeMillis()
                 onDoubleOnClick(v)
             }

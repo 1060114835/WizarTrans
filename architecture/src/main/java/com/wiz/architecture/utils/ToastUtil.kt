@@ -21,6 +21,7 @@ internal object ToastUtil {
      *  在application处进行初始化
      */
     fun loop(appContext: Context) {
+
         val handler = Handler(Looper.getMainLooper()) {
             if (it.what == TOAST_MESSAGE_FLAG) {
                 Toast.makeText(appContext, it.obj as String, Toast.LENGTH_SHORT).show()
@@ -30,16 +31,14 @@ internal object ToastUtil {
         executor.execute {
             while (true) {
                 if (messageQueue.isNotEmpty() &&
-                    (lastExecuteTime == 0L ||
-                            System.currentTimeMillis() - lastExecuteTime >= minimumInterval)
-                ) {
-                    val message = Message.obtain().apply {
-                        what = TOAST_MESSAGE_FLAG
-                        obj = messageQueue.removeAt(0)
-                        lastExecuteTime = System.currentTimeMillis()
-                        (obj as String).log()
-                    }
-                    handler.sendMessage(message)
+                    (System.currentTimeMillis() - lastExecuteTime >= minimumInterval)) {
+                        val message = Message.obtain().apply {
+                            what = TOAST_MESSAGE_FLAG
+                            obj = messageQueue.removeAt(0)
+                            lastExecuteTime = System.currentTimeMillis()
+                            (obj as String).log()
+                        }
+                        handler.sendMessage(message)
                 }
             }
         }

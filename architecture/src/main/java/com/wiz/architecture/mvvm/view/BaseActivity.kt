@@ -15,15 +15,17 @@ import pub.devrel.easypermissions.EasyPermissions
 
 
 /**
- * 一个页面只绑定两个
+ * v层：一个页面只绑定一个StateViewModel和一个ActionHandler，分别处理状态和事件
  */
 abstract class BaseActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
 
     val viewModel by lazy { initViewModel() }
     val actionHandler by lazy { initActionHandler() }
 
+    //activity层面的ViewModelProvider
     val activityViewModelProvider: ViewModelProvider by lazy { ViewModelProvider(this) }
 
+    //application层面的ViewModelProvider
     val appViewModelProvider: ViewModelProvider by lazy {
         ViewModelProvider(application as App, appViewModelFactory) }
 
@@ -35,6 +37,9 @@ abstract class BaseActivity : AppCompatActivity(), EasyPermissions.PermissionCal
     protected abstract fun configureDataBinding() : ViewDataBinding
 
     protected abstract fun initActionHandler() : ActionHandler
+
+    //页面初始化时加载数据
+    protected abstract fun loadData()
 
     /**
      * 配置权限，子类重写这个方法返回当前页面需要的动态权限
@@ -53,6 +58,7 @@ abstract class BaseActivity : AppCompatActivity(), EasyPermissions.PermissionCal
         configureTitleBar()
         val viewDataBinding = configureDataBinding()
         setContentView(viewDataBinding.root)
+        loadData()
         viewDataBinding.lifecycleOwner = this
         lifecycle.addObserver(NetStateManager)
     }
@@ -92,4 +98,6 @@ abstract class BaseActivity : AppCompatActivity(), EasyPermissions.PermissionCal
 
     override fun onPermissionsGranted(requestCode: Int, perms: MutableList<String>) {
     }
+
+
 }

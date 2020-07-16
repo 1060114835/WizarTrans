@@ -3,6 +3,10 @@ package com.wiz.architecture.utils
 import android.util.Log
 import com.wiz.architecture.BuildConfig
 
+
+/**
+ * 建议外部不直接使用。通过String的拓展函数来开放给外部
+ */
 internal object LogUtils {
 
     fun test(message: String) {
